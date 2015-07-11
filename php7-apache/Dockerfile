@@ -12,10 +12,6 @@ RUN dnf -y install httpd; \
 RUN mkdir -p /var/www/html
 RUN mkdir -p /var/log/httpd
 
-# Copy apache run script
-ADD run-apache.sh /run-apache.sh
-RUN chmod -v +x /run-apache.sh
-
 # Install remi's repository
 RUN dnf -y install wget
 RUN wget http://rpms.remirepo.net/fedora/remi-release-22.rpm
@@ -38,8 +34,9 @@ RUN dnf --enablerepo=remi --enablerepo=remi-test -y install \
   php70-php-xml; \
   dnf clean all
 
-# Enable PHP 7.0 SCL as the default PHP interpretor
-RUN source /opt/remi/php70/enable
+# Copy apache run script
+ADD run-apache.sh /run-apache.sh
+RUN chmod -v +x /run-apache.sh
 
 # Configure PHP using custom VirtualHost configuration
 ADD virtualhost.conf /etc/httpd/conf.d/virtualhost.conf
